@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนการจัดการเรียนรู้ดิจิทัล: ไฟฟ้าสถิต (กฎของคูลอมบ์)</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f3f4f6; }
+        h1, h2, h3, h4, h5, h6, .font-prompt { font-family: 'Prompt', sans-serif; }
+        .math-display { overflow-x: auto; overflow-y: hidden; }
+    </style>
+</head>
+<body class="text-gray-800 pb-20">
+
+    <nav class="bg-indigo-800 text-white p-4 shadow-md sticky top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-bolt text-2xl text-yellow-400"></i>
+                <div>
+                    <span class="font-bold text-lg font-prompt block leading-tight">Digital Lesson Plan</span>
+                    <span class="text-xs text-indigo-200">Active Learning & Technology Integration</span>
+                </div>
+            </div>
+            <div id="connectionStatusBadge" class="px-3 py-1 rounded-full text-[10px] bg-gray-700 text-gray-300 flex items-center gap-2">
+                <span id="statusIndicator" class="w-2 h-2 rounded-full bg-gray-500"></span>
+                <span id="connectionStatusText">กำลังตรวจสอบ...</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto max-w-5xl p-4 md:p-8 my-6 bg-white shadow-xl rounded-xl border border-gray-200">
+        
+        <header class="border-b-4 border-indigo-600 pb-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                <div class="flex-1">
+                    <h5 class="text-indigo-600 font-bold uppercase tracking-wide text-sm mb-1">กลุ่มสาระการเรียนรู้วิทยาศาสตร์และเทคโนโลยี</h5>
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 font-prompt">โรงเรียนห้องสอนศึกษาสคูล</h1>
+                    <div class="mt-4 space-y-1">
+                        <h2 class="text-2xl font-bold text-gray-800">เรื่อง ไฟฟ้าสถิต (แรงระหว่างประจุและกฎของคูลอมบ์)</h2>
+                        <h3 class="text-lg text-gray-500 font-light">(Electrostatics: Coulomb's Law and Electric Field)</h3>
+                    </div>
+                </div>
+                
+                <div class="bg-indigo-50 p-5 rounded-xl border border-indigo-100 min-w-[280px] shadow-sm text-sm">
+                    <div class="flex items-center gap-3 mb-2 border-b border-indigo-200 pb-2">
+                        <div class="bg-indigo-600 text-white w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-user-tie"></i></div>
+                        <div>
+                            <p class="text-[10px] text-gray-500">ครูผู้สอน</p>
+                            <p class="font-bold text-indigo-900">นายจอช โซรอส</p>
+                        </div>
+                    </div>
+                    <p class="flex justify-between"><span>วิชา:</span> <span class="font-bold">ฟิสิกส์ 3 (ว32201)</span></p>
+                    <p class="flex justify-between"><span>ชั้น:</span> <span class="font-bold">มัธยมศึกษาปีที่ 5</span></p>
+                </div>
+            </div>
+        </header>
+
+        <!-- บันทึกหลังสอน -->
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500">
+            <h3 class="font-bold text-xl text-gray-800 mb-4 font-prompt flex items-center">
+                <i class="fa-solid fa-clipboard-check text-green-600 mr-2"></i> บันทึกหลังการจัดการเรียนรู้
+            </h3>
+            <form id="reflectionForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input type="hidden" id="teacher" value="นายจอช โซรอส">
+                <input type="hidden" id="subject" value="ฟิสิกส์ 3 (ว32201)">
+                <input type="hidden" id="currentDate">
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-700">1. ผลสัมฤทธิ์ทางการเรียน</label>
+                    <textarea id="result" class="w-full p-3 border border-gray-300 rounded-lg h-32 resize-none" placeholder="สรุปผลการสอน..."></textarea>
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-bold text-gray-700">2. ปัญหาและอุปสรรค</label>
+                    <textarea id="problems" class="w-full p-3 border border-gray-300 rounded-lg h-32 resize-none" placeholder="ปัญหาที่พบ..."></textarea>
+                </div>
+                <div class="space-y-2 md:col-span-2">
+                    <label class="block text-sm font-bold text-gray-700">3. ข้อเสนอแนะ / แนวทางแก้ไข</label>
+                    <textarea id="suggestions" class="w-full p-3 border border-gray-300 rounded-lg h-24 resize-none" placeholder="ข้อเสนอแนะ..."></textarea>
+                </div>
+                <div class="md:col-span-2 flex justify-end">
+                    <button type="button" onclick="submitToSheet()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-10 rounded-lg shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-save"></i> บันทึกข้อมูลลง Google Sheet
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- บันทึกผู้นิเทศ -->
+        <section class="mt-8 bg-white p-6 rounded-xl shadow-lg border-t-4 border-purple-500 mb-6">
+            <h3 class="font-bold text-xl text-gray-800 mb-4 font-prompt flex items-center">
+                <i class="fa-solid fa-user-check text-purple-600 mr-2"></i> บันทึกจากผู้นิเทศ
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 space-y-4 border-r md:pr-6 border-gray-100">
+                    <input type="text" id="supervisorName" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="ชื่อผู้นิเทศ">
+                    <div class="grid grid-cols-2 gap-4">
+                        <input type="text" id="supervisorPosition" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="ตำแหน่ง">
+                        <input type="text" id="supervisorLevel" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="วิทยฐานะ">
+                    </div>
+                    <textarea id="supervisorComment" class="w-full p-3 border border-gray-300 rounded-lg h-32 resize-none" placeholder="ข้อคิดเห็นและคำแนะนำสำหรับการสอนครั้งนี้"></textarea>
+                    <button type="button" onclick="submitSupervision()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg shadow transition flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle"></i> บันทึกผลการนิเทศ
+                    </button>
+                </div>
+                <div class="md:col-span-1 bg-purple-50 p-4 rounded-lg border border-purple-100 flex flex-col">
+                    <h4 class="font-bold text-purple-800 mb-3 border-b border-purple-200 pb-2 text-sm flex items-center justify-between">
+                        <span>ประวัติการนิเทศล่าสุด</span>
+                        <i class="fa-solid fa-history opacity-50 text-xs"></i>
+                    </h4>
+                    <div id="supervisionSummaryArea" class="flex-1 overflow-y-auto max-h-[350px] text-sm text-gray-600 space-y-3 mb-4 pr-1">
+                        <p class="text-gray-400 italic text-center mt-4 text-xs">กำลังโหลดข้อมูล...</p>
+                    </div>
+                    <button type="button" onclick="fetchData('getSupervision')" class="w-full bg-white text-purple-600 border border-purple-600 hover:bg-purple-100 font-bold py-2 rounded-lg transition text-xs flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-rotate mr-1"></i> อัปเดตข้อมูล
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // URL ของ Web App จาก Google Apps Script ล่าสุดที่คุณให้มา
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLbkInSxuYeP4ZWu07Tn6mD1Y0ebLk7Cigq4nq4j2fCQybblskGHEaIQVRszrWMRtnig/exec';
+        
+        // ตั้งค่าวันที่ปัจจุบันในรูปแบบไทย
+        document.getElementById('currentDate').value = new Date().toLocaleDateString('th-TH');
+
+        /**
+         * ฟังก์ชันหลักสำหรับสื่อสารกับ Google Script ผ่าน JSONP
+         */
+        function callGAS(params, callback) {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('connectionStatusText');
+            
+            const callbackName = 'jsonp_' + Math.round(100000 * Math.random());
+            const script = document.createElement('script');
+            
+            // Timeout 15 วินาที
+            const timeout = setTimeout(() => {
+                const el = document.getElementById(callbackName);
+                if (el) el.remove();
+                delete window[callbackName];
+                statusIndicator.className = 'w-2 h-2 rounded-full bg-red-500';
+                statusText.innerText = 'เชื่อมต่อล้มเหลว';
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เชื่อมต่อล้มเหลว',
+                    text: 'ไม่สามารถติดต่อ Google Script ได้ กรุณาตรวจสอบการ Deploy ในเมลของคุณให้เป็น "Anyone"'
+                });
+            }, 15000);
+
+            window[callbackName] = function(data) {
+                clearTimeout(timeout);
+                delete window[callbackName];
+                const el = document.getElementById(callbackName);
+                if (el) el.remove();
+                
+                statusIndicator.className = 'w-2 h-2 rounded-full bg-green-500';
+                statusText.innerText = 'เชื่อมต่อแล้ว';
+                if (callback) callback(data);
+            };
+
+            const queryString = new URLSearchParams({
+                ...params,
+                prefix: callbackName,
+                _t: Date.now()
+            }).toString();
+
+            script.src = SCRIPT_URL + (SCRIPT_URL.includes('?') ? '&' : '?') + queryString;
+            script.id = callbackName;
+            script.onerror = () => {
+                clearTimeout(timeout);
+                statusIndicator.className = 'w-2 h-2 rounded-full bg-red-600';
+                statusText.innerText = 'URL ไม่ถูกต้อง';
+                Swal.fire('Error', 'ไม่สามารถโหลดสคริปต์ได้ กรุณาตรวจสอบ URL ในโค้ด', 'error');
+            };
+            document.body.appendChild(script);
+        }
+
+        // ฟังก์ชันบันทึกข้อมูลหลังสอน
+        function submitToSheet() {
+            const data = {
+                action: 'saveReflection',
+                teacher: document.getElementById('teacher').value,
+                subject: document.getElementById('subject').value,
+                date: document.getElementById('currentDate').value,
+                result: document.getElementById('result').value,
+                problems: document.getElementById('problems').value,
+                suggestions: document.getElementById('suggestions').value
+            };
+
+            if(!data.result || !data.problems) {
+                return Swal.fire({ icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกผลสัมฤทธิ์และปัญหาที่พบ' });
+            }
+
+            Swal.fire({ title: 'กำลังบันทึกลง Sheet...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            callGAS(data, function(response) {
+                if(response && response.status === 'success') {
+                    Swal.fire({ icon: 'success', title: 'สำเร็จ!', text: 'บันทึกข้อมูลเรียบร้อยแล้ว', timer: 2000 });
+                    document.getElementById('result').value = '';
+                    document.getElementById('problems').value = '';
+                    document.getElementById('suggestions').value = '';
+                } else {
+                    Swal.fire('ล้มเหลว', 'เกิดข้อผิดพลาดในการบันทึก: ' + (response ? response.message : ''), 'error');
+                }
+            });
+        }
+
+        // ฟังก์ชันบันทึกข้อมูลผู้นิเทศ
+        function submitSupervision() {
+            const data = {
+                action: 'saveSupervision',
+                supervisor: document.getElementById('supervisorName').value,
+                position: document.getElementById('supervisorPosition').value,
+                level: document.getElementById('supervisorLevel').value,
+                comment: document.getElementById('supervisorComment').value,
+                date: new Date().toLocaleDateString('th-TH')
+            };
+
+            if(!data.supervisor || !data.comment) {
+                return Swal.fire({ icon: 'warning', title: 'ข้อมูลไม่ครบ', text: 'กรุณากรอกชื่อผู้นิเทศและข้อคิดเห็น' });
+            }
+
+            Swal.fire({ title: 'กำลังบันทึก...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+
+            callGAS(data, function(response) {
+                if(response && response.status === 'success') {
+                    Swal.fire({ icon: 'success', title: 'สำเร็จ!', text: 'บันทึกผลการนิเทศแล้ว', timer: 1500 });
+                    document.getElementById('supervisorName').value = '';
+                    document.getElementById('supervisorComment').value = '';
+                    fetchData('getSupervision'); // โหลดประวัติใหม่
+                }
+            });
+        }
+
+        // ฟังก์ชันดึงข้อมูลประวัติการนิเทศ
+        function fetchData(action) {
+            const area = document.getElementById('supervisionSummaryArea');
+            area.innerHTML = '<p class="text-gray-400 italic text-center mt-4 text-xs">กำลังรีเฟรชข้อมูลล่าสุด...</p>';
+
+            callGAS({ action: action }, function(data) {
+                if (Array.isArray(data) && data.length > 0) {
+                    area.innerHTML = '';
+                    // แสดงสูงสุด 5 รายการล่าสุด
+                    data.reverse().slice(0, 5).forEach(item => {
+                        area.innerHTML += `
+                            <div class="bg-white p-3 rounded-lg border border-purple-200 shadow-sm text-[11px] mb-2 hover:border-purple-400 transition-colors">
+                                <div class="flex justify-between items-start mb-1">
+                                    <span class="font-bold text-purple-700">${item.supervisor || 'ไม่ระบุชื่อ'}</span>
+                                    <span class="text-[9px] text-gray-400">${item.date || ''}</span>
+                                </div>
+                                <p class="text-gray-600 italic leading-relaxed">"${item.comment || ''}"</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    area.innerHTML = '<p class="text-gray-400 italic text-center mt-4 text-xs">ไม่พบประวัติการนิเทศ</p>';
+                }
+            });
+        }
+
+        // ตรวจสอบการเชื่อมต่อทันทีที่เริ่ม
+        window.onload = () => {
+            setTimeout(() => {
+                callGAS({ action: 'check' }, (res) => {
+                    console.log('GAS Initial Check:', res);
+                    fetchData('getSupervision');
+                });
+            }, 500);
+        };
+    </script>
+</body>
+</html>
